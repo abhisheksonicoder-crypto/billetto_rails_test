@@ -1,0 +1,23 @@
+<% content_for :title, @event.title %>
+
+<article class="page event-detail">
+  <p><%= link_to "All events", events_path %></p>
+  <% if @event.image_url.present? %>
+    <%= image_tag @event.image_url, alt: @event.title, class: "event-image" %>
+  <% end %>
+  <h1><%= @event.title %></h1>
+  <p class="meta">
+    <time datetime="<%= @event.starts_at.iso8601 %>"><%= l(@event.starts_at, format: :long) %></time>
+    <% if @event.ends_at.present? %>
+      <span>until <%= l(@event.ends_at, format: :long) %></span>
+    <% end %>
+    <% if @event.city.present? %><span><%= @event.city %></span><% end %>
+  </p>
+  <% if @event.description.present? %>
+    <%= simple_format(strip_tags(@event.description)) %>
+  <% end %>
+  <% if @event.url.present? %>
+    <p><%= link_to "View on Billetto", @event.url, target: "_blank", rel: "noopener" %></p>
+  <% end %>
+  <%= render "events/vote", event: @event, vote: @vote %>
+</article>

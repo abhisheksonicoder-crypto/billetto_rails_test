@@ -1,0 +1,18 @@
+<% content_for :title, "Events" %>
+
+<section class="page">
+  <h1>Public events</h1>
+
+  <% if @events.empty? %>
+    <p class="empty">No events yet. Import the catalog with <code>bin/rails events:import</code>.</p>
+  <% else %>
+    <ol class="events">
+      <%= render @events %>
+    </ol>
+  <% end %>
+
+  <nav class="pager">
+    <%= link_to "Previous", events_path(page: @previous_page) if @previous_page %>
+    <%= link_to "Next", events_path(page: @next_page) if @next_page %>
+  </nav>
+</section>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Billetto events" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <% if clerk_configured? %>
+      <script
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        data-clerk-publishable-key="<%= clerk_publishable_key %>"
+        crossorigin="anonymous"
+        defer></script>
+    <% end %>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <%= link_to "Events", root_path, class: "brand" %>
+      <nav>
+        <% if current_user_id %>
+          <div id="user-button"></div>
+          <button type="button" id="sign-out">Log out</button>
+        <% else %>
+          <%= link_to "Sign in", sign_in_path %>
+          <%= link_to "Sign up", sign_up_path %>
+        <% end %>
+      </nav>
+    </header>
+
+    <main>
+      <% if notice %><p class="flash notice"><%= notice %></p><% end %>
+      <% if alert %><p class="flash alert"><%= alert %></p><% end %>
+      <%= yield %>
+    </main>
+
+    <% if clerk_configured? %>
+      <script>
+        function mountClerk() {
+          if (!window.Clerk) return
+
+          window.Clerk.load().then(function () {
+            var signIn = document.getElementById("sign-in")
+            if (signIn) window.Clerk.mountSignIn(signIn)
+
+            var signUp = document.getElementById("sign-up")
+            if (signUp) window.Clerk.mountSignUp(signUp)
+
+            var userButton = document.getElementById("user-button")
+            if (userButton && window.Clerk.user) window.Clerk.mountUserButton(userButton)
+
+            var signOut = document.getElementById("sign-out")
+            if (!signOut) return
+
+            signOut.addEventListener("click", function (event) {
+              event.preventDefault()
+              window.Clerk.signOut({ redirectUrl: "/" })
+            })
+          })
+        }
+
+        if (window.Clerk) {
+          mountClerk()
+        } else {
+          document.addEventListener("DOMContentLoaded", mountClerk)
+        }
+      </script>
+    <% end %>
+  </body>
+</html>

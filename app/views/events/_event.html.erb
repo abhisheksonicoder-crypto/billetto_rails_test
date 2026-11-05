@@ -1,0 +1,22 @@
+<li class="event" id="<%= dom_id(event) %>">
+  <% if event.image_url.present? %>
+    <%= image_tag event.image_url, alt: event.title, class: "event-image" %>
+  <% end %>
+
+  <div class="event-body">
+    <h2><%= link_to event.title, event %></h2>
+    <p class="meta">
+      <time datetime="<%= event.starts_at.iso8601 %>"><%= l(event.starts_at, format: :long) %></time>
+      <% if event.city.present? %>
+        <span><%= event.city %></span>
+      <% end %>
+      <% if event.organizer_name.present? %>
+        <span><%= event.organizer_name %></span>
+      <% end %>
+    </p>
+    <% if event.description.present? %>
+      <p><%= truncate(strip_tags(event.description), length: 180) %></p>
+    <% end %>
+    <%= render "events/vote", event: event, vote: @votes_by_event_id[event.id] %>
+  </div>
+</li>
