@@ -1,0 +1,9 @@
+<% content_for :title, "Sign up" %>
+
+<section class="page narrow">
+  <h1>Sign up</h1>
+  <% unless clerk_configured? %>
+    <p>Set <code>CLERK_PUBLISHABLE_KEY</code> and <code>CLERK_SECRET_KEY</code>, then reload this page.</p>
+  <% end %>
+  <div id="sign-up"></div>
+</section>
