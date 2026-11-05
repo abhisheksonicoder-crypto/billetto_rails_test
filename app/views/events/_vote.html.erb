@@ -1,0 +1,8 @@
+<div class="votes">
+  <%= button_to event_vote_path(event), params: { vote: { direction: "up" } }, class: ("selected" if vote&.direction == "up") do %>
+    Like <%= event.upvote_count %>
+  <% end %>
+  <%= button_to event_vote_path(event), params: { vote: { direction: "down" } }, class: ("selected" if vote&.direction == "down") do %>
+    Dislike <%= event.downvote_count %>
+  <% end %>
+</div>
